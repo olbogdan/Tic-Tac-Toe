@@ -35,11 +35,17 @@ struct ContentView: View {
                             if !isSquareOccupied(in: moves, forIndex: i) {
                                 moves[i] = Move(player: .human, boardIndex: i)
                                 isGameBoardDisabled = true
-                                // check for win condition or draw
+                                if checkWinCondition(for: .human, in: moves) {
+                                    print("human wins")
+                                }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     let computerPosition = determineComputerMovePosition(in: moves)
                                     moves[computerPosition] = Move(player: .computer, boardIndex: computerPosition)
                                     isGameBoardDisabled = false
+
+                                    if checkWinCondition(for: .computer, in: moves) {
+                                        print("computer wins")
+                                    }
                                 }
                             }
                         }
@@ -64,7 +70,22 @@ struct ContentView: View {
         return movePosition
     }
 
+    private let winPatterns: Set<Set<Int>> = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ]
 
+    private func checkWinCondition(for player: Player, in moves: [Move?]) -> Bool {
+        let playerMoves = moves.compactMap { $0 }
+            .filter { $0.player == player }
+            .map { $0.boardIndex }
+
+        for pattern in winPatterns where pattern.isSubset(of: playerMoves) {
+            return true
+        }
+        return false
+    }
 }
 
 private enum Player {

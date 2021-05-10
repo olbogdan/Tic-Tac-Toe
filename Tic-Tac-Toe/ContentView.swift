@@ -27,7 +27,7 @@ struct ContentView: View {
                                 .opacity(0.5)
                                 .frame(width: geometry.size.width/3-5,
                                        height: geometry.size.width/3-5)
-                            Image(systemName: "xmark")
+                            Image(systemName: moves[i]?.indicator ?? "")
                                 .resizable()
                                 .frame(width: geometry.size.width/3-50, height: geometry.size.width/3-50)
                         }.onTapGesture {

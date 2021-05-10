@@ -31,14 +31,20 @@ struct ContentView: View {
                                 .resizable()
                                 .frame(width: geometry.size.width/3-50, height: geometry.size.width/3-50)
                         }.onTapGesture {
-                            moves[i] = Move(player: isHumanTurn ? .human : .computer, boardIndex: i)
-                            isHumanTurn.toggle()
+                            if !isSquareOccupied(in: moves, forIndex: i) {
+                                moves[i] = Move(player: isHumanTurn ? .human : .computer, boardIndex: i)
+                                isHumanTurn.toggle()
+                            }
                         }
                     }
                 }
                 Spacer()
             }
         }.padding()
+    }
+
+    private func isSquareOccupied(in moves: [Move?], forIndex index: Int) -> Bool {
+        return moves.contains(where: { $0?.boardIndex == index })
     }
 }
 

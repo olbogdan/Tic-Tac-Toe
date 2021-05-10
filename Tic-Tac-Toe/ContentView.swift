@@ -98,8 +98,24 @@ struct ContentView: View {
             .filter { $0.player == .computer }
             .map { $0.boardIndex }
 
-        let winPosition = winPatterns
+        var winPosition = winPatterns
             .map { $0.subtracting(computerPositions) }
+            .filter { $0.count == 1 }
+            .compactMap { $0.first }
+            .first { !isSquareOccupied(in: moves, forIndex: $0) }
+
+        if winPosition != nil {
+            return winPosition!
+        }
+        
+        // If AI can't win then block
+        let humanPositions = moves
+            .compactMap { $0 }
+            .filter { $0.player == .human }
+            .map { $0.boardIndex }
+
+        winPosition = winPatterns
+            .map { $0.subtracting(humanPositions) }
             .filter { $0.count == 1 }
             .compactMap { $0.first }
             .first { !isSquareOccupied(in: moves, forIndex: $0) }

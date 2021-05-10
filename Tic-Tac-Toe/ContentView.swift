@@ -9,8 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                LazyVGrid(columns: columns) {
+                    ForEach(0 ..< 9) { _ in
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(.blue)
+                                .opacity(0.5)
+                                .frame(width: geometry.size.width/3-5,
+                                       height: geometry.size.width/3-5)
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .frame(width: geometry.size.width/3-50, height: geometry.size.width/3-50)
+                        }
+                    }
+                }
+                Spacer()
+            }
+        }.padding()
+    }
+}
     }
 }
 

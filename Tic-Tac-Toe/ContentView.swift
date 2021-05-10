@@ -31,6 +31,17 @@ struct ContentView: View {
         }.padding()
     }
 }
+
+private enum Player {
+    case human, computer
+}
+
+private struct Move {
+    let player: Player
+    let boardIndex: Int
+
+    var indicator: String {
+        return player == .human ? "xmark" : "circle"
     }
 }
 

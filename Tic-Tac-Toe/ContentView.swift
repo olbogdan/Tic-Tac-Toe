@@ -82,7 +82,33 @@ struct ContentView: View {
         return moves.contains(where: { $0?.boardIndex == index })
     }
 
+    private let winPatterns: Set<Set<Int>> = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6]
+    ]
+
+    // If AI can't win then block
+    // If AI can't block then take middle square
+
     private func determineComputerMovePosition(in moves: [Move?]) -> Int {
+        // If AI can win, then win
+        let computerPositions = moves
+            .compactMap { $0 }
+            .filter { $0.player == .computer }
+            .map { $0.boardIndex }
+
+        let winPosition = winPatterns
+            .map { $0.subtracting(computerPositions) }
+            .filter { $0.count == 1 }
+            .compactMap { $0.first }
+            .first { !isSquareOccupied(in: moves, forIndex: $0) }
+
+        if winPosition != nil {
+            return winPosition!
+        }
+
+        // if AI can't take middle square, take random available square
         var movePosition: Int
         repeat {
             movePosition = Int.random(in: 0 ..< 9)
@@ -90,18 +116,12 @@ struct ContentView: View {
         return movePosition
     }
 
-    private let winPatterns: Set<Set<Int>> = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6]
-    ]
-
     private func checkWinCondition(for player: Player, in moves: [Move?]) -> Bool {
-        let playerMoves = moves.compactMap { $0 }
+        let playerPositions = moves.compactMap { $0 }
             .filter { $0.player == player }
             .map { $0.boardIndex }
 
-        for pattern in winPatterns where pattern.isSubset(of: playerMoves) {
+        for pattern in winPatterns where pattern.isSubset(of: playerPositions) {
             return true
         }
         return false

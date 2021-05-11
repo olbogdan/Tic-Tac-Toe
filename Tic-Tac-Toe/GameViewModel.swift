@@ -136,9 +136,3 @@ struct Move {
         return player == .human ? "xmark" : "circle"
     }
 }
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        GameView()
-    }
-}

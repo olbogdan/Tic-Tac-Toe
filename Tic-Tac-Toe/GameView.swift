@@ -17,14 +17,8 @@ struct GameView: View {
                 LazyVGrid(columns: viewModel.columns) {
                     ForEach(0 ..< 9) { i in
                         ZStack {
-                            Rectangle()
-                                .foregroundColor(.blue)
-                                .opacity(0.5)
-                                .frame(width: geometry.size.width/3-5,
-                                       height: geometry.size.width/3-5)
-                            Image(systemName: viewModel.moves[i]?.indicator ?? "")
-                                .resizable()
-                                .frame(width: geometry.size.width/3-50, height: geometry.size.width/3-50)
+                            GameSquareView(proxy: geometry)
+                            PlayerIndicator(systemImageName: viewModel.moves[i]?.indicator ?? "", proxy: geometry)
                         }.onTapGesture {
                             viewModel.processPlayerMove(for: i)
                         }
@@ -41,5 +35,34 @@ struct GameView: View {
                   dismissButton: .default(alertItem.buttonTitle,
                                           action: { viewModel.resetGame() }))
         }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        GameView()
+    }
+}
+
+struct GameSquareView: View {
+    var proxy: GeometryProxy
+
+    var body: some View {
+        Rectangle()
+            .foregroundColor(.blue)
+            .opacity(0.5)
+            .frame(width: proxy.size.width/3-5,
+                   height: proxy.size.width/3-5)
+    }
+}
+
+struct PlayerIndicator: View {
+    var systemImageName: String
+    var proxy: GeometryProxy
+
+    var body: some View {
+        Image(systemName: systemImageName)
+            .resizable()
+            .frame(width: proxy.size.width/3-50, height: proxy.size.width/3-50)
     }
 }

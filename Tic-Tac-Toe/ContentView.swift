@@ -88,9 +88,6 @@ struct ContentView: View {
         [0, 4, 8], [2, 4, 6]
     ]
 
-    // If AI can't win then block
-    // If AI can't block then take middle square
-
     private func determineComputerMovePosition(in moves: [Move?]) -> Int {
         // If AI can win, then win
         let computerPositions = moves
@@ -122,6 +119,12 @@ struct ContentView: View {
 
         if winPosition != nil {
             return winPosition!
+        }
+        
+        // If AI can't block then take middle square
+        let centerSquare = 4
+        if !isSquareOccupied(in: moves, forIndex: centerSquare) {
+            return centerSquare
         }
 
         // if AI can't take middle square, take random available square

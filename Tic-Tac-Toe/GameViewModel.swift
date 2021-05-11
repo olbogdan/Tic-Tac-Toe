@@ -17,7 +17,7 @@ final class GameViewModel: ObservableObject {
                                GridItem(.flexible())]
 
     func processPlayerMove(for i: Int) {
-        // human move processinng
+        // human move processing
         if !isSquareOccupied(in: moves, forIndex: i) {
             moves[i] = Move(player: .human, boardIndex: i)
 

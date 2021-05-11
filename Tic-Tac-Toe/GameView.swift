@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct GameView: View {
-    let columns: [GridItem] = [GridItem(.flexible()),
-                               GridItem(.flexible()),
-                               GridItem(.flexible())]
+
+    @StateObject private var viewModel = GameViewModel()
 
     @State private var moves: [Move?] = Array(repeating: nil, count: 9)
 
@@ -22,7 +21,7 @@ struct GameView: View {
         GeometryReader { geometry in
             VStack {
                 Spacer()
-                LazyVGrid(columns: columns) {
+                LazyVGrid(columns: viewModel.columns) {
                     ForEach(0 ..< 9) { i in
                         ZStack {
                             Rectangle()
